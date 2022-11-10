@@ -41,7 +41,7 @@ use Illuminate\Support\Collection;
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
- * @method Field\SwitchField    switch($column, $label = '')
+ * @method Field\SwitchField    switch ($column, $label = '')
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
  * @method Field\Divide         divider()
@@ -69,6 +69,11 @@ class NestedForm
      * @var string
      */
     protected $relationName;
+
+    /**
+     * @var string
+     */
+    protected $label;
 
     /**
      * NestedForm key.
@@ -102,7 +107,7 @@ class NestedForm
      * NestedForm constructor.
      *
      * @param string $relation
-     * @param Model  $model
+     * @param Model $model
      */
     public function __construct($relation, $model = null)
     {
@@ -124,6 +129,24 @@ class NestedForm
     }
 
     /**
+     * @return string
+     */
+    public function label()
+    {
+        return value($this->label ?? $this->getKey(), $this);
+    }
+
+    /**
+     * @param \Closure|string|null $label
+     * @return self
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+        return $this;
+    }
+
+    /**
      * Get the value of the model's primary key.
      *
      * @return mixed|null
@@ -142,7 +165,7 @@ class NestedForm
             return $key;
         }
 
-        return 'new_'.static::DEFAULT_KEY_NAME;
+        return 'new_' . static::DEFAULT_KEY_NAME;
     }
 
     /**
@@ -200,7 +223,7 @@ class NestedForm
     /**
      * Set original values for fields.
      *
-     * @param array  $data
+     * @param array $data
      * @param string $relatedKeyName
      *
      * @return $this
@@ -309,7 +332,7 @@ class NestedForm
     /**
      * Fetch value in input data by column name.
      *
-     * @param array        $data
+     * @param array $data
      * @param string|array $columns
      *
      * @return array|mixed
@@ -435,7 +458,7 @@ class NestedForm
      * Add nested-form fields dynamically.
      *
      * @param string $method
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return mixed
      */
