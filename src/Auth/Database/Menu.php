@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\DB;
 class Menu extends Model
 {
     use DefaultDatetimeFormat;
-    use ModelTree {
-        ModelTree::boot as treeBoot;
-    }
+    use ModelTree;
 
     /**
      * The attributes that are mass assignable.
@@ -95,7 +93,7 @@ class Menu extends Model
      */
     protected static function boot()
     {
-        static::treeBoot();
+        parent::boot();
 
         static::deleting(function ($model) {
             $model->roles()->detach();
