@@ -25,12 +25,21 @@ trait Resizable
         // We take image from posts field
         $image = $this->attributes[$attribute];
 
-        $thumbnail = $this->getThumbnail($image, $type);
+        $thumbnail = $this->getThumbnailFileName($image, $type);
 
         $thumbnail = $this->getDisk()->exists($thumbnail) ? $thumbnail : $image;
 
         return $this->getDisk()->url($thumbnail);
     }
+
+    public function url($attribute = 'image')
+    {
+        if (!isset($this->attributes[$attribute])) {
+            return '';
+        }
+        return $this->getDisk()->url($this->attributes[$attribute]);
+    }
+
 
     /**
      * Generate thumbnail URL.
@@ -40,7 +49,7 @@ trait Resizable
      *
      * @return string
      */
-    public function getThumbnail($image, $type)
+    public function getThumbnailFileName($image, $type)
     {
         // We need to get extension type ( .jpeg , .png ...)
         $ext = pathinfo($image, PATHINFO_EXTENSION);
