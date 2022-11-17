@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Traits;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 trait Resizable
@@ -26,7 +27,9 @@ trait Resizable
 
         $thumbnail = $this->getThumbnail($image, $type);
 
-        return \Illuminate\Support\Facades\Storage::disk(config('admin.upload.disk'))->exists($thumbnail) ? $thumbnail : $image;
+        $thumbnail = $this->getDisk()->exists($thumbnail) ? $thumbnail : $image;
+
+        return $this->getDisk()->url($thumbnail);
     }
 
     /**
@@ -43,9 +46,14 @@ trait Resizable
         $ext = pathinfo($image, PATHINFO_EXTENSION);
 
         // We remove extension from file name so we can append thumbnail type
-        $name = Str::replaceLast('.'.$ext, '', $image);
+        $name = Str::replaceLast('.' . $ext, '', $image);
 
         // We merge original name + type + extension
-        return $name.'-'.$type.'.'.$ext;
+        return $name . '-' . $type . '.' . $ext;
+    }
+
+    public function getDisk()
+    {
+        return Storage::disk(config('admin.upload.disk'));
     }
 }
